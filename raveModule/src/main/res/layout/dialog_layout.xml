@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:rave="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/payment_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingBottom="4dp">
+    <WebView
+        android:id="@+id/web_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </WebView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/curved_shape"
+        android:padding="2dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:gravity="center">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/close_btn"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/close"
+                    android:backgroundTint="@color/lightGrey"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/image_view_round_corner"
+                    android:layout_alignParentTop="true"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="10"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <flutterwave.com.rave.Components.SquareImageView
+                        rave:squareViewByHeight="false"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:scaleType="fitXY"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/item_img"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="Hello World!" />
+            <TextView
+                android:id="@+id/item_description"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"
+                android:text="Hello World!" />
+            <TextView
+                android:id="@+id/item_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/niagra"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:text="Hello World!" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/segment_view_gradient"
+            android:padding="16dp">
+            <LinearLayout
+                android:id="@+id/input_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioGroup
+                    android:id="@+id/segmentGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/rectangle_shape"
+                    android:orientation="horizontal"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/card_segment_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/bank_card_small"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingLeft="45dp"
+                        android:drawablePadding="-45dp"
+                        android:text="@string/card"
+                        android:textColor="@color/white"
+                        android:background="@color/martinique"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        style="@style/RadioButton" />
+
+                    <RadioButton
+                        android:id="@+id/account_segment_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingBottom="16dp"
+                        android:paddingTop="16dp"
+                        android:text="@string/account"
+                        android:textColor="@color/black"
+                        android:drawableLeft="@drawable/account_small_filled"
+                        android:paddingLeft="32dp"
+                        android:drawablePadding="-32dp"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        style="@style/RadioButton" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:id="@+id/alert_message_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/message_text_view"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:padding="8dp"
+                        android:text="Approved. Successful"
+                        android:gravity="center"
+                        android:clickable="false"
+                        android:textSize="18sp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/curved_shape_curious_blue"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/account_segment_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/acount_number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:lines="1"
+                        android:maxLength="10"
+                        android:inputType="number"
+                        android:hint="@string/account_number"
+                        android:layout_marginTop="8dp" />
+                    <Spinner
+                        android:id="@+id/bank_spinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"/>
+
+                    <Spinner
+                        android:id="@+id/otp_spinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/otp_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/otp_number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:lines="1"
+                        android:maxLength="5"
+                        android:inputType="number"
+                        android:hint="@string/otp"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/card_segment_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/card_number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:drawableRight="@drawable/bank_card_filled"
+                        android:hint="@string/card_number"
+                        android:lines="1"
+                        android:maxLength="19"
+                        android:digits="1234567890 "
+                        android:inputType="number"
+                        android:layout_marginTop="8dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/expiry_date"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:inputType="date"
+                            android:hint="@string/date_format"
+                            android:lines="1"
+                            android:maxLength="5"
+                            android:layout_marginTop="8dp" />
+
+                        <EditText
+                            android:id="@+id/cvv"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:lines="1"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:hint="@string/cvv"
+                            android:layout_marginTop="8dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/curved_shape_niagara"
+                android:textColor="@color/white"
+                android:id="@+id/dismiss_btn"
+                android:padding="12dp"
+                android:layout_below="@+id/input_details"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>

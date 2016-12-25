@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">rave</string>
+    <string name="test_rave_click">Rave button was clicked.</string>
+</resources>

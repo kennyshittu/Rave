@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Rave</string>
+    <string name="card">Card</string>
+    <string name="account">Account</string>
+    <string name="card_field_error">Enter a valid card number.</string>
+    <string name="account_number_field_error">Enter a valid account number.</string>
+    <string name="otp_field_error">Invalid OTP.</string>
+    <string name="date_field_error">Enter a valid card expiry date. e.g (MM/YY)</string>
+    <string name="cvv_field_error">Enter a valid card cvv.</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="click_here">Click here to complete your \n transaction.</string>
+    <string name="close_form">CLOSE FORM</string>
+    <string name="network_error">Network error, check you connection.</string>
+    <string name="validate_otp">Validate OTP</string>
+    <string name="account_number">Account Number</string>
+    <string name="otp">OTP</string>
+    <string name="card_number">Card Number</string>
+    <string name="select_bank">SELECT BANK</string>
+    <string name="select_otp">SELECT OTP option</string>
+    <string name="spinner_error">None selected</string>
+    <string name="cvv">CVV</string>
+    <string name="date_format">MM/YY</string>
+
+    <string-array name="bank_array">
+        <item>SELECT BANK</item>
+        <item>ACCESS BANK NIGERIA</item>
+    </string-array>
+
+    <string-array name="otp_option_array">
+        <item>SELECT OTP option</item>
+        <item>Hardware Token</item>
+        <item>USSD</item>
+    </string-array>
+</resources>

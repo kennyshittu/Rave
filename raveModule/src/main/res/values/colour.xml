@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#e71010</color>
+    <color name="niagra">#16A085</color>
+    <color name="martinique">#372e4c</color>
+    <color name="yellow">#c7d113</color>
+    <color name="blue">#1447f1</color>
+    <color name="grey">#717171</color>
+    <color name="lightGrey">#d1d1d1</color>
+    <color name="bggrey">#f5f5f5</color>
+    <color name="twitterBlue">#059ff5</color>
+    <color name="twitterBlueDark">#007ABB</color>
+</resources>

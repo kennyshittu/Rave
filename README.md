@@ -1,5 +1,5 @@
 # Rave
-Rave is an android plugin for interacting with the Flutterwave payment api. It's easy to use and integrate into you existing project. Also, it takes away the extra UI design work, Rave has a nice custom dialog box (both portrait & landscape) for collecting transaction details from users.
+Rave is an android plugin for interacting with the Flutterwave payment api. It's easy to use and integrate into your existing project. Also, it takes away the extra UI design work, Rave has a nice custom dialog box (both portrait & landscape) for collecting transaction details from users.
 
 ## Design
 
@@ -26,7 +26,7 @@ Note : You don't have to add these dependencies yourself, they've already been a
 
 ## Installation
 
-Rave can be added to you project manually by adding the raveModule folder to you project root directory.
+Rave can be added to your project manually by adding the raveModule folder to you project root directory.
 Then add `compile project(":raveModule")` to your dependencies in build.gradle at app level.
 
 We hope to make rave available on Maven repo and Jcenter soon.

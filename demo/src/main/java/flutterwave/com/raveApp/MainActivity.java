@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
                         "FLWPUBK-dd90ea51702e8c6206be12f8d17bb849",
                         "FLWSECK-b4cb9aa9f1a80c55927ad90cd70bf90a",
                         "kehinde.a.shittu@gmail.com",
-                        "127.0.0.1",
                         "FLW-TXREF-PB-1481725499667-RND_76"
                 );
                 RaveDialog rave = new RaveDialog(MainActivity.this, raveData);

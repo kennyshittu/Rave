@@ -31,8 +31,7 @@ public class RaveData {
     private List<Map<String, Object>> mMeta;
 
     public RaveData(Bitmap mItemImage, String mItemName, String mItemDescription,
-                    Double mItemPrice, String mPBFPubKey, String mSecretKey, String mCustomerEmailAddress,
-                    String mIP, String mTxRef) {
+                    Double mItemPrice, String mPBFPubKey, String mSecretKey, String mCustomerEmailAddress, String mTxRef) {
         this.mItemImage = mItemImage;
         this.mItemName = mItemName;
         this.mItemDescription = mItemDescription;
@@ -40,7 +39,7 @@ public class RaveData {
         this.mPBFPubKey = mPBFPubKey;
         this.mSecretKey = mSecretKey;
         this.mCustomerEmailAddress = mCustomerEmailAddress;
-        this.mIP = mIP;
+        this.mIP = "127.0.0.1";
         this.mTxRef = mTxRef;
 
         this.mCurrency = "NGN";

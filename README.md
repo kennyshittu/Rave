@@ -27,6 +27,8 @@ Note : You don't have to add these dependencies yourself, they've already been a
 ## Installation
 
 Rave can be added to you project manually by adding the raveModule folder to you project root directory.
+Then add `compile project(":raveModule")` to your dependencies in build.gradle at app level.
+
 We hope to make rave available on Maven repo and Jcenter soon.
 
 

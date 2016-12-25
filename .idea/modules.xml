@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/rave.iml" filepath="$PROJECT_DIR$/rave.iml" />
-      <module fileurl="file://$PROJECT_DIR$/rave/raveModule.iml" filepath="$PROJECT_DIR$/rave/raveModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/raveModule/raveModule.iml" filepath="$PROJECT_DIR$/raveModule/raveModule.iml" />
     </modules>
   </component>
 </project>

@@ -1,1 +1,1 @@
-include ':app', ':raveModule'
+include ':demo', ':raveModule'

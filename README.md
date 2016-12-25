@@ -27,12 +27,12 @@ Note : You don't have to add these dependencies yourself, they've already been a
 ## Installation
 
 Rave can be added to you project manually by adding the raveModule folder to you project root directory.
-We hope to push rave to Mave repo and Jcenter soon.
+We hope to make rave available on Maven repo and Jcenter soon.
 
 
 ## How to use
 
-You call Rave within your activity as shown below.
+You can call Rave within your activity as shown below.
 ```
 public class MainActivity extends AppCompatActivity {
 

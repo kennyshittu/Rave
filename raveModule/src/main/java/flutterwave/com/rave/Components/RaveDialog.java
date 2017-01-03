@@ -2,6 +2,8 @@ package flutterwave.com.rave.Components;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Optional;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -127,7 +130,7 @@ public class RaveDialog extends Dialog {
                         // otp validation
                         if (validateInputFields()) {
                             String otp = mOtpNumber.getText().toString();
-                            Map<String, String> params = RaveUtil.buildValidateRequestParam(mRaveData.getmPBFPubKey(), mAccountValidateTxRef, otp);
+                            Map<String, String> params = RaveUtil.buildValidateRequestParam(mRaveData.getmPbfPubKey(), mAccountValidateTxRef, otp);
                             sendRequest(params, VALIDATE_ENDPOINT);
                         }
 
@@ -142,7 +145,7 @@ public class RaveDialog extends Dialog {
                             String encryptedData = RaveUtil.getEncryptedData(jsonData, mRaveData.getmSecretKey());
 
                             //set request params
-                            Map<String, String> params = RaveUtil.buildChargeRequestParam(mRaveData.getmPBFPubKey(), encryptedData);
+                            Map<String, String> params = RaveUtil.buildChargeRequestParam(mRaveData.getmPbfPubKey(), encryptedData);
                             sendRequest(params, CHARGE_ENDPOINT);
                         }
                     }
@@ -154,7 +157,11 @@ public class RaveDialog extends Dialog {
 
         //set item image
         ImageView itemImageView = (ImageView) findViewById(R.id.item_img);
-        RoundedBitmapDrawable roundDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), mRaveData.getmItemImage());
+        Bitmap bitmap = Optional.fromNullable(mRaveData.getmItemImage()).or(
+                BitmapFactory.decodeResource(getContext().getResources(), R.drawable.coke)
+        );
+
+        RoundedBitmapDrawable roundDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmap);
         roundDrawable.setCircular(true);
         itemImageView.setImageDrawable(roundDrawable);
 
@@ -314,10 +321,10 @@ public class RaveDialog extends Dialog {
             if (mIsCardTransaction) {
                 String[] dateData = mExpiryDate.getText().toString().split("/");
                 return new CardChargeRequestData(
-                        mRaveData.getmPBFPubKey(),
+                        mRaveData.getmPbfPubKey(),
                         mRaveData.getmItemPrice().toString(),
                         mRaveData.getmCustomerEmailAddress(),
-                        mRaveData.getmIP(),
+                        mRaveData.getmIp(),
                         mRaveData.getmTxRef(),
                         mRaveData.getmCountry(),
                         mRaveData.getmCurrency(),
@@ -334,10 +341,10 @@ public class RaveDialog extends Dialog {
                 int index = mBankSpinner.getSelectedItemPosition();
                 String bankCode = mBankCodes.get(index);
                 return new AccountChargeRequestData(
-                        mRaveData.getmPBFPubKey(),
+                        mRaveData.getmPbfPubKey(),
                         mRaveData.getmItemPrice().toString(),
                         mRaveData.getmCustomerEmailAddress(),
-                        mRaveData.getmIP(),
+                        mRaveData.getmIp(),
                         mRaveData.getmTxRef(),
                         mRaveData.getmCountry(),
                         mRaveData.getmCurrency(),

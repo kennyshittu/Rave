@@ -2,18 +2,14 @@ package flutterwave.com.rave.Components;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -28,7 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -119,7 +114,7 @@ public class RaveDialog extends Dialog {
                     if (mPayBtn.getText().toString().equals(getContext().getString(R.string.click_here))) {
                         // complete card validation
                         mWebView.getSettings().setJavaScriptEnabled(true);
-                        mWebView.addJavascriptInterface(new MyJavaScriptInterface(), "INTERFACE");
+                        mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(), "INTERFACE");
                         mWebView.setWebViewClient(new WebViewClient() {
                             @Override
                             public void onPageFinished(WebView view, String url) {
@@ -687,8 +682,8 @@ public class RaveDialog extends Dialog {
     }
 
     /* An instance of this class will be registered as a JavaScript interface */
-    class MyJavaScriptInterface {
-        public MyJavaScriptInterface() {
+    class WebViewJavaScriptInterface {
+        public WebViewJavaScriptInterface() {
         }
 
         @SuppressWarnings("unused")

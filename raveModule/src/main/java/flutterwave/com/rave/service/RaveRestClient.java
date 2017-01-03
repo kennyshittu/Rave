@@ -14,7 +14,7 @@ import okhttp3.Response;
  */
 
 public class RaveRestClient {
-    private static final String BASE_URL = "http://flw-pms-dev.eu-west-1.elasticbeanstalk.com/flwv3-pug/getpaid/api";
+    private static final String BASE_URL = "http://flw-pms-dev.eu-west-1.elasticbeanstalk.com/flwv3-pug/getpaidx/api";
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static OkHttpClient client = new OkHttpClient();

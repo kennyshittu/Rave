@@ -121,10 +121,6 @@ public class RaveUtil {
             int hashLength = md5Hash.length();
             String encryptionKey = cleanSecret.substring(0, 12).concat(md5Hash.substring(hashLength - 12, hashLength));
 
-            System.out.println("MD5 hash : " + md5Hash);
-            System.out.println("cleanSecret : " + cleanSecret);
-            System.out.println("encryptionKey : " + encryptionKey);
-
             return encrypt(unEncryptedString, encryptionKey);
         }catch (Exception e){
             e.printStackTrace();

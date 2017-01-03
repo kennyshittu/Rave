@@ -30,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
                         "Shawarma and Coke",
                         "Shawarma and Coke for kenny",
                         1400.00,
-                        "FLWPUBK-dd90ea51702e8c6206be12f8d17bb849",
-                        "FLWSECK-b4cb9aa9f1a80c55927ad90cd70bf90a",
+                        "FLWPUBK-b06794b2e72d2cf13215b220b04f314b-X",
+                        "FLWSECK-d4c03911a1c2b2db5fbd39d8ca8c2825-X",
                         "kehinde.a.shittu@gmail.com",
-                        "FLW-TXREF-PB-1481725499667-RND_76"
+                        "rave-dash-1483447695"
                 );
                 RaveDialog rave = new RaveDialog(MainActivity.this, raveData);
                 rave.show();

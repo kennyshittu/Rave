@@ -59,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
                         "FLWPUBK-XXXXX", // public key
                         "FLWSECK-XXXXX", // secret key
                         "test@gmail.com", // buyer's email address
-                        "FLW-TXREF-XXXXX" // tx-ref)
+                        "FLW-TXREF-XXXXX", // tx-ref
+                        false // this boolean field specifies if auth model used is PIN(true) or other(false)
+                        )
                         .build();
 
                 // initialize RaveDialog using RaveData object created above and call show() to display dialog.

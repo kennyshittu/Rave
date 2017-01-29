@@ -95,6 +95,7 @@ public class RaveDialog extends Dialog {
     private EditText mAccountNumber;
     private EditText mOtpNumber;
     private EditText mCardPin;
+    private EditText mAmountCharge;
     private TextView mAlertMessage;
 
     private Spinner mBankSpinner;
@@ -349,6 +350,7 @@ public class RaveDialog extends Dialog {
         mUseToken = (CheckBox) findViewById(R.id.use_token);
         mUserToken = (EditText) findViewById(R.id.user_token);
         mCardPin = (EditText) findViewById(R.id.card_pin);
+        mAmountCharge = (EditText) findViewById(R.id.amount_charged);
 
         if (mRaveData.isPinAuthModel()) {
             mCardPin.setVisibility(View.VISIBLE);
@@ -623,6 +625,14 @@ public class RaveDialog extends Dialog {
                 Map<Object, Object> chargeToken = (Map<Object, Object>) data.get("chargeToken");
                 mUserCode = (String) chargeToken.get("user_token");
 
+                Number amount = (Number) data.get("amount");
+                Number charged_amount = (Number) data.get("charged_amount");
+                Number appfee = (Number) data.get("appfee");
+
+                String amountMsg = String.format("%s + %s = %s", amount, appfee, charged_amount);
+
+                mAmountCharge.setText(amountMsg);
+
                 switch (authMode) {
                     case VBVSECURECODE:
                         if ((data.get("chargeResponseCode").equals("02")
@@ -778,6 +788,15 @@ public class RaveDialog extends Dialog {
                 Map<String, Object> mapResponse = RaveUtil.getMapFromJsonString(responseString);
                 Map<String, Object> data = (Map<String, Object>) mapResponse.get("data");
                 if (response.isSuccessful() && (data.get("chargeResponseCode").equals("02") || data.get("chargeResponseCode").equals("00"))) {
+
+                    Integer amount = (Integer) data.get("amount");
+                    Double charged_amount = (Double) data.get("charged_amount");
+                    Double appfee = (Double) data.get("appfee");
+
+                    String amountMsg = String.format("%s + %s = %s", amount, appfee, charged_amount);
+
+                    mAmountCharge.setText(amountMsg);
+
                     mOtpNumber.setEnabled(true);
                     mValidateTxRef = (String) data.get("txRef");
                     mPayBtn.setText(R.string.validate_otp);

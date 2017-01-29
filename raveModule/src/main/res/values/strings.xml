@@ -16,6 +16,7 @@
     <string name="validate_otp">Validate OTP</string>
     <string name="account_number">Account Number</string>
     <string name="otp">OTP</string>
+    <string name="amount_charged">Amount Charged</string>
     <string name="card_number">Card Number</string>
     <string name="card_pin">Card Pin</string>
     <string name="pin">Card Pin</string>

@@ -202,6 +202,24 @@
                     android:visibility="gone"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="14sp"
+                        android:layout_height="wrap_content"
+                        android:text="Item Cost + Service Fee = Total Cost" />
+
+                    <EditText
+                        android:id="@+id/amount_charged"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:lines="1"
+                        android:enabled="false"
+                        android:inputType="text"
+                        android:hint="@string/amount_charged"
+                        android:layout_marginTop="8dp" />
+
                     <EditText
                         android:id="@+id/otp_number"
                         android:layout_width="fill_parent"

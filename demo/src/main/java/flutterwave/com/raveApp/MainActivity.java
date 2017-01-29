@@ -65,42 +65,42 @@ public class MainActivity extends AppCompatActivity {
 
 //        // random debit
 //
-//        raveButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                RaveData raveData = new RaveData.Builder(
-//                        "Shawarma and Coke",
-//                        "Shawarma and Coke for kenny",
-//                        10000.0,
-//                        "FLWPUBK-e8fdf9cf4d34c2084b040b5f8b214844-X",
-//                        "FLWSECK-fc2285159317c22ffaf3c811a68bc430-X",
-//                        "kehinde.a.shittu@gmail.com",
-//                        "rave-checkout-1485623235",
-//                        false)
-//                        .build();
-//                RaveDialog rave = new RaveDialog(MainActivity.this, raveData);
-//                rave.show();
-//            }
-//        });
-
-
-// pin
         raveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RaveData raveData = new RaveData.Builder(
                         "Shawarma and Coke",
                         "Shawarma and Coke for kenny",
-                        1400.00,
-                        "FLWPUBK-6c011cdb12f0c81e332424b061047e7b-X",
-                        "FLWSECK-9796e060383fecbe90f984dfa9e2e1df-X",
+                        10000.0,
+                        "FLWPUBK-e8fdf9cf4d34c2084b040b5f8b214844-X",
+                        "FLWSECK-fc2285159317c22ffaf3c811a68bc430-X",
                         "kehinde.a.shittu@gmail.com",
                         "rave-checkout-1485623235",
-                        true)
+                        false)
                         .build();
                 RaveDialog rave = new RaveDialog(MainActivity.this, raveData);
                 rave.show();
             }
         });
+
+
+// pin
+//        raveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RaveData raveData = new RaveData.Builder(
+//                        "Shawarma and Coke",
+//                        "Shawarma and Coke for kenny",
+//                        1400.00,
+//                        "FLWPUBK-6c011cdb12f0c81e332424b061047e7b-X",
+//                        "FLWSECK-9796e060383fecbe90f984dfa9e2e1df-X",
+//                        "kehinde.a.shittu@gmail.com",
+//                        "rave-checkout-1485623235",
+//                        true)
+//                        .build();
+//                RaveDialog rave = new RaveDialog(MainActivity.this, raveData);
+//                rave.show();
+//            }
+//        });
     }
 }

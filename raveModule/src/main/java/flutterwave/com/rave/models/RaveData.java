@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Booleans;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class RaveData {
     private String mCustomerEmailAddress;
     private String mIp;
     private String mTxRef;
+    private boolean isPinAuthModel;
 
     // optional properties
     private Bitmap mItemImage;
@@ -39,6 +41,7 @@ public class RaveData {
         this.mSecretKey = builder.secretKey;
         this.mCustomerEmailAddress = builder.customerEmailAddress;
         this.mTxRef = builder.txRef;
+        this.isPinAuthModel = builder.isPinAuthModel;
 
         this.mItemImage = builder.itemImage; // will use default rave logo if not set.
         this.mCurrency = Optional.fromNullable(builder.currency).or("NGN");
@@ -110,6 +113,10 @@ public class RaveData {
         return mMeta;
     }
 
+    public boolean isPinAuthModel() {
+        return isPinAuthModel;
+    }
+
     public static class Builder {
         private String itemName;
         private String itemDescription;
@@ -118,6 +125,7 @@ public class RaveData {
         private String secretKey;
         private String customerEmailAddress;
         private String txRef;
+        private boolean isPinAuthModel;
 
         // no compulsory
         private Bitmap itemImage;
@@ -130,7 +138,7 @@ public class RaveData {
         private List<Map<String, Object>> meta;
 
         public Builder(String itemName, String itemDescription, Double itemPrice, String pbfPubKey,
-                       String secretKey, String customerEmailAddress, String txRef) {
+                       String secretKey, String customerEmailAddress, String txRef, boolean isPinAuthModel) {
             this.itemName = itemName;
             this.itemDescription = itemDescription;
             this.itemPrice = itemPrice;
@@ -138,6 +146,7 @@ public class RaveData {
             this.secretKey = secretKey;
             this.customerEmailAddress = customerEmailAddress;
             this.txRef = txRef;
+            this.isPinAuthModel = isPinAuthModel;
         }
 
         public Builder withMeta(List<Map<String, Object>> meta) {

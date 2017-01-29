@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/rave.iml" filepath="$PROJECT_DIR$/rave.iml" />
       <module fileurl="file://$PROJECT_DIR$/raveModule/raveModule.iml" filepath="$PROJECT_DIR$/raveModule/raveModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RaveTester/raveModule/raveModule.iml" filepath="$PROJECT_DIR$/../RaveTester/raveModule/raveModule.iml" />
     </modules>
   </component>
 </project>

@@ -219,19 +219,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <EditText
                         android:id="@+id/card_number"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="4dp"
                         android:drawableRight="@drawable/bank_card_filled"
                         android:hint="@string/card_number"
                         android:lines="1"
                         android:maxLength="19"
                         android:digits="1234567890 "
                         android:inputType="number"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="4dp" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -247,19 +246,66 @@
                             android:hint="@string/date_format"
                             android:lines="1"
                             android:maxLength="5"
-                            android:layout_marginTop="8dp" />
+                            android:layout_marginTop="4dp" />
+                        <EditText
+                            android:id="@+id/user_token"
+                            android:visibility="gone"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:inputType="text"
+                            android:hint="@string/token"
+                            android:lines="1"
+                            android:maxLength="5"
+                            android:layout_marginTop="4dp" />
 
                         <EditText
                             android:id="@+id/cvv"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="4dp"
                             android:lines="1"
                             android:inputType="number"
                             android:maxLength="3"
                             android:hint="@string/cvv"
-                            android:layout_marginTop="8dp" />
+                            android:layout_marginTop="4dp" />
+
+                        <EditText
+                            android:id="@+id/card_pin"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:hint="@string/card_pin"
+                            android:lines="1"
+                            android:maxLength="4"
+                            android:digits="1234567890 "
+                            android:inputType="number"
+                            android:layout_marginTop="4dp" />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox android:id="@+id/remember_card"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Remember My card"
+                            android:onClick="rememberCard"/>
+                        <CheckBox android:id="@+id/use_token"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Use Token"
+                            android:onClick="useToken"/>
+
                     </LinearLayout>
 
 

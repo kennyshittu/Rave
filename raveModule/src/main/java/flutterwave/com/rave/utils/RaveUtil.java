@@ -25,6 +25,7 @@ public class RaveUtil {
     private static final String CLIENT = "client";
     private static final String ALG = "alg";
     private static final String TX_REF = "txRef";
+    private static final String TRANSACTION_REF = "transaction_reference";
     private static final String OTP = "otp";
     private static final String ALGORITHM = "DESede";
     private static final String TRANSFORMATION = "DESede/ECB/PKCS5Padding";
@@ -108,6 +109,16 @@ public class RaveUtil {
         Map<String, String> params = new HashMap<>();
         params.put(PBF_PUB_KEY, key);
         params.put(TX_REF, txRef);
+        params.put(OTP, otp);
+
+        return params;
+    }
+
+    public static Map<String, String> buildValidateChargeRequestParam(String key, String txRef, String otp){
+        //set request params
+        Map<String, String> params = new HashMap<>();
+        params.put(PBF_PUB_KEY, key);
+        params.put(TRANSACTION_REF, txRef);
         params.put(OTP, otp);
 
         return params;

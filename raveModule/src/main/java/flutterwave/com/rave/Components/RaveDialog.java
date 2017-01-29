@@ -1,6 +1,7 @@
 package flutterwave.com.rave.Components;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import flutterwave.com.rave.R;
+import flutterwave.com.rave.models.ShortCodeRequestData;
 import flutterwave.com.rave.service.RaveRestClient;
 import flutterwave.com.rave.models.AccountChargeRequestData;
 import flutterwave.com.rave.models.CardChargeRequestData;
@@ -52,9 +55,18 @@ public class RaveDialog extends Dialog {
 
     private static final String CHARGE_ENDPOINT = "/charge";
     private static final String VALIDATE_ENDPOINT = "/validate";
+    private static final String VALIDATE_CHARGE_ENDPOINT = "/validatecharge";
     private static final String BANKS_URL = "http://flw-pms-dev.eu-west-1.elasticbeanstalk.com/banks";
     private static final String PAY_FORMAT = "PAY NGN %.2f";
     private static final String PRICE_FORMAT = "NGN %.2f";
+
+
+    private static final String VBVSECURECODE = "VBVSECURECODE";
+    private static final String NOAUTH = "NOAUTH";
+    private static final String PIN = "PIN";
+    private static final String RANDOM_DEBIT = "RANDOM_DEBIT";
+
+
     private static final int CARD_DETAILS = 1;
     private static final int ACCOUNT_DETAILS = 2;
     private static final int ALERT_MESSAGE = 3;
@@ -77,20 +89,31 @@ public class RaveDialog extends Dialog {
     private LinearLayout mOtpDetailView;
 
     private EditText mCardNumber;
+    private EditText mUserToken;
     private EditText mExpiryDate;
     private EditText mCvv;
     private EditText mAccountNumber;
     private EditText mOtpNumber;
+    private EditText mCardPin;
     private TextView mAlertMessage;
 
     private Spinner mBankSpinner;
     private Spinner mOtpSpinner;
 
     private WebView mWebView;
+    private ProgressDialog mProgressBar;
+    private CheckBox mRememberBox;
+    private CheckBox mUseToken;
 
+    //TODO: replace with enums
     private boolean mIsCardTransaction = true;
+    private boolean mIsAccountValidate = true;
+    private boolean mShouldRememberCardDetails = false;
+    private boolean mShouldUseToken = false;
+
     private String mAuthUrlString = "";
-    private String mAccountValidateTxRef = "";
+    private String mValidateTxRef = "";
+    private String mUserCode = "";
     private List<String> mBankNames = new ArrayList<String>();
     private List<String> mBankCodes = new ArrayList<String>();
 
@@ -118,20 +141,52 @@ public class RaveDialog extends Dialog {
                         // complete card validation
                         mWebView.getSettings().setJavaScriptEnabled(true);
                         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(), "INTERFACE");
+                        mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+
+                        mProgressBar = ProgressDialog.show(getContext(), "Verifying Transaction", "Authenticating...");
+
                         mWebView.setWebViewClient(new WebViewClient() {
+
                             @Override
                             public void onPageFinished(WebView view, String url) {
-                                view.loadUrl("javascript:window.INTERFACE.processContent(document.getElementsByTagName('body')[0].innerText);");
+                                Log.i(TAG, "Finished loading URL: " + url);
+                                if (mProgressBar.isShowing()) {
+                                    mProgressBar.dismiss();
+                                }
+                                new android.os.Handler().postDelayed(
+                                        new Runnable() {
+                                            public void run() {
+                                                mWebView.loadUrl("javascript:window.INTERFACE.processContent(document.getElementsByTagName('body')[0].innerText);");
+                                            }
+                                        },
+                                        3000);
+
                             }
                         });
+                        //disable button while web view loads
+                        mPayBtn.setText(R.string.please_wait);
+                        mPayBtn.setEnabled(false);
+                        mWebView.setVisibility(View.VISIBLE);
                         mWebView.loadUrl(mAuthUrlString);
 
                     } else if (mPayBtn.getText().toString().equals(getContext().getString(R.string.validate_otp))) {
                         // otp validation
                         if (validateInputFields()) {
                             String otp = mOtpNumber.getText().toString();
-                            Map<String, String> params = RaveUtil.buildValidateRequestParam(mRaveData.getmPbfPubKey(), mAccountValidateTxRef, otp);
-                            sendRequest(params, VALIDATE_ENDPOINT);
+
+                            if (mIsAccountValidate) {
+                                Map<String, String> params = RaveUtil.buildValidateRequestParam(
+                                        mRaveData.getmPbfPubKey(),
+                                        mValidateTxRef, otp
+                                );
+                                sendRequest(params, VALIDATE_ENDPOINT);
+                            } else {
+                                Map<String, String> params = RaveUtil.buildValidateChargeRequestParam(
+                                        mRaveData.getmPbfPubKey(),
+                                        mValidateTxRef, otp
+                                );
+                                sendRequest(params, VALIDATE_CHARGE_ENDPOINT);
+                            }
                         }
 
                     } else if (mPayBtn.getText().toString().equals(getContext().getString(R.string.close_form))) {
@@ -146,6 +201,7 @@ public class RaveDialog extends Dialog {
 
                             //set request params
                             Map<String, String> params = RaveUtil.buildChargeRequestParam(mRaveData.getmPbfPubKey(), encryptedData);
+                            System.out.println("sending charge req : " + params);
                             sendRequest(params, CHARGE_ENDPOINT);
                         }
                     }
@@ -289,6 +345,50 @@ public class RaveDialog extends Dialog {
         });
 
         mWebView = (WebView) findViewById(R.id.web_view);
+        mRememberBox = (CheckBox) findViewById(R.id.remember_card);
+        mUseToken = (CheckBox) findViewById(R.id.use_token);
+        mUserToken = (EditText) findViewById(R.id.user_token);
+        mCardPin = (EditText) findViewById(R.id.card_pin);
+
+        if (mRaveData.isPinAuthModel()) {
+            mCardPin.setVisibility(View.VISIBLE);
+        } else {
+            mCardPin.setVisibility(View.GONE);
+        }
+
+
+        mRememberBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShouldRememberCardDetails = ((CheckBox) v).isChecked();
+            }
+        });
+
+        mUseToken.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShouldUseToken = ((CheckBox) v).isChecked();
+
+                if (mShouldUseToken) {
+                    mCardNumber.setVisibility(View.GONE);
+                    mExpiryDate.setVisibility(View.GONE);
+                    mRememberBox.setVisibility(View.GONE);
+//                    if (mRaveData.isPinAuthModel()) {
+//                        mCardPin.setVisibility(View.GONE);
+//                    }
+                    mUserToken.setVisibility(View.VISIBLE);
+                } else {
+                    mUserToken.setVisibility(View.GONE);
+                    mCardNumber.setVisibility(View.VISIBLE);
+                    mExpiryDate.setVisibility(View.VISIBLE);
+                    mRememberBox.setVisibility(View.VISIBLE);
+//                    if (mRaveData.isPinAuthModel()) {
+//                        mCardPin.setVisibility(View.VISIBLE);
+//                    }
+                }
+            }
+        });
+
     }
 
     private void fetchBanks() {
@@ -319,24 +419,47 @@ public class RaveDialog extends Dialog {
     private BaseRequestData getRequestData() {
         try {
             if (mIsCardTransaction) {
+                BaseRequestData data;
                 String[] dateData = mExpiryDate.getText().toString().split("/");
-                return new CardChargeRequestData(
-                        mRaveData.getmPbfPubKey(),
-                        mRaveData.getmItemPrice().toString(),
-                        mRaveData.getmCustomerEmailAddress(),
-                        mRaveData.getmIp(),
-                        mRaveData.getmTxRef(),
-                        mRaveData.getmCountry(),
-                        mRaveData.getmCurrency(),
-                        mRaveData.getmFirstName(),
-                        mRaveData.getmLastName(),
-                        mRaveData.getmNarration(),
-                        mRaveData.getmMeta(),
-                        RaveUtil.cleanText(mCardNumber.getText().toString(), " "),
-                        mCvv.getText().toString(),
-                        dateData[1], // month
-                        dateData[0] // year
-                );
+                if (!mShouldUseToken) {
+                    data = new CardChargeRequestData(
+                            mRaveData.getmPbfPubKey(),
+                            mRaveData.getmItemPrice().toString(),
+                            mRaveData.getmCustomerEmailAddress(),
+                            mRaveData.getmIp(),
+                            mRaveData.getmTxRef(),
+                            mRaveData.getmCountry(),
+                            mRaveData.getmCurrency(),
+                            mRaveData.getmFirstName(),
+                            mRaveData.getmLastName(),
+                            mRaveData.getmNarration(),
+                            mRaveData.getmMeta(),
+                            RaveUtil.cleanText(mCardNumber.getText().toString(), " "),
+                            mCvv.getText().toString(),
+                            dateData[1], // month
+                            dateData[0], // year
+                            mRaveData.isPinAuthModel() ? mCardPin.getText().toString() : ""
+                    );
+
+                } else {
+                    data = new ShortCodeRequestData(
+                            mRaveData.getmPbfPubKey(),
+                            mRaveData.getmItemPrice().toString(),
+                            mRaveData.getmCustomerEmailAddress(),
+                            mRaveData.getmIp(),
+                            mRaveData.getmTxRef(),
+                            mRaveData.getmCountry(),
+                            mRaveData.getmCurrency(),
+                            mRaveData.getmFirstName(),
+                            mRaveData.getmLastName(),
+                            mRaveData.getmNarration(),
+                            mRaveData.getmMeta(),
+                            mCvv.getText().toString(),
+                            mUserToken.getText().toString(),
+                            mRaveData.isPinAuthModel() ? mCardPin.getText().toString() : ""
+                    );
+                }
+                return data;
             } else {
                 int index = mBankSpinner.getSelectedItemPosition();
                 String bankCode = mBankCodes.get(index);
@@ -367,18 +490,33 @@ public class RaveDialog extends Dialog {
     private boolean validateInputFields() {
         boolean isValid = true;
         if (mCardDetailView.isShown()) {
-            if (mCardNumber.getText().length() != 19) {
-                mCardNumber.setError(getContext().getString(R.string.card_field_error));
-                isValid = false;
-            }
 
-            if (mExpiryDate.getText().length() != 5) {
-                mExpiryDate.setError(getContext().getString(R.string.date_field_error));
-                isValid = false;
+            if (!mShouldUseToken) {
+                if (mCardNumber.getText().length() != 19) {
+                    mCardNumber.setError(getContext().getString(R.string.card_field_error));
+                    isValid = false;
+                }
+
+                if (mExpiryDate.getText().length() != 5) {
+                    mExpiryDate.setError(getContext().getString(R.string.date_field_error));
+                    isValid = false;
+                }
+            } else {
+                if (mUserToken.getText().length() != 5) {
+                    mUserToken.setError(getContext().getString(R.string.user_token_field_error));
+                    isValid = false;
+                }
             }
             if (mCvv.getText().length() != 3) {
                 mCvv.setError(getContext().getString(R.string.cvv_field_error));
                 isValid = false;
+            }
+
+            if (mRaveData.isPinAuthModel()) {
+                if (mCardPin.getText().length() != 4) {
+                    mCardPin.setError(getContext().getString(R.string.pin_field_error));
+                    isValid = false;
+                }
             }
         }
 
@@ -424,26 +562,160 @@ public class RaveDialog extends Dialog {
 
     }
 
-    private void handleCardChargeResponse(Response response) {
+    private void handleCardValidateResponse(Response response) {
         if (response != null) {
             Reader responseReader = response.body().charStream();
 
             Map<String, Object> mapResponse = RaveUtil.getMapFromJsonReader(responseReader);
             Map<String, Object> data = (Map<String, Object>) mapResponse.get("data");
-                if (response.isSuccessful() && (data.get("chargeResponseCode").equals("02")
-                        || data.get("chargeResponseCode").equals("00"))) {
-                    mPayBtn.setBackgroundResource(R.drawable.curved_shape_martinique);
-                    showView(CARD_DETAILS);
-                    mPayBtn.setText(R.string.click_here);
+            Map<String, Object> innerData = (Map<String, Object>) data.get("data");
 
-                    mAuthUrlString = (String) data.get("authurl");
-                } else {
-                    mAlertMessage.setText((String) data.get("message"));
-                    mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
-                    mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
-                    lockorUnlockInputFields(true);
-                    showView(CARD_AND_ALERT_MESSAGE);
+            System.out.println("card charge response : " + mapResponse);
+            System.out.println("card charge response outter data: " + data);
+
+            if (response.isSuccessful() && (innerData.get("responsecode").equals("02")
+                    || innerData.get("responsecode").equals("00"))) {
+
+                // finished random debit
+                System.out.println("card charge response inner data: " + innerData);
+
+                String msg = (String) innerData.get("responsemessage");
+                if (mShouldRememberCardDetails) {
+                    msg = (msg + "\n To avoid entering card detail on subsequent transactions," +
+                            " use the token below. \n user token : "
+                            + mUserCode);
                 }
+
+                mAlertMessage.setText(msg);
+                mAlertMessage.setBackgroundResource(R.drawable.curved_shape_curious_blue);
+
+                showView(ALERT_MESSAGE);
+                mPayBtn.setText(R.string.close_form);
+                mPayBtn.setBackgroundResource(R.drawable.curved_shape);
+                mPayBtn.setTextColor(Color.BLACK);
+
+            } else {
+                mAlertMessage.setText((String) data.get("message"));
+                mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+                mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+                lockorUnlockInputFields(true);
+                showView(CARD_AND_ALERT_MESSAGE);
+            }
+        } else {
+            mAlertMessage.setText(R.string.network_error);
+            mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+            mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+            lockorUnlockInputFields(true);
+            showView(CARD_AND_ALERT_MESSAGE);
+        }
+    }
+
+
+    private void handleCardChargeResponse(Response response) {
+        if (response != null) {
+            Reader responseReader = response.body().charStream();
+            Map<String, Object> mapResponse = RaveUtil.getMapFromJsonReader(responseReader);
+            Map<String, Object> data = (Map<String, Object>) mapResponse.get("data");
+
+            String authMode = (String) data.get("authModelUsed");
+            System.out.println("card charge response : " + data);
+            if (response.isSuccessful() && authMode != null) {
+                Map<Object, Object> chargeToken = (Map<Object, Object>) data.get("chargeToken");
+                mUserCode = (String) chargeToken.get("user_token");
+
+                switch (authMode) {
+                    case VBVSECURECODE:
+                        if ((data.get("chargeResponseCode").equals("02")
+                                || data.get("chargeResponseCode").equals("00"))) {
+                            mAuthUrlString = (String) data.get("authurl");
+                            System.out.println("card charge response : " + data);
+
+                            mPayBtn.setBackgroundResource(R.drawable.curved_shape_martinique);
+                            showView(CARD_DETAILS);
+                            mPayBtn.setText(R.string.click_here);
+
+                        } else {
+                            mAlertMessage.setText((String) data.get("message"));
+                            mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+                            mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+                            lockorUnlockInputFields(true);
+                            showView(CARD_AND_ALERT_MESSAGE);
+                        }
+                        break;
+                    case NOAUTH:
+                        if (data.get("chargeResponseCode").equals("00")) {
+                            System.out.println("card charge response : " + data);
+                            String msg = (String) data.get("vbvrespmessage");
+                            if (mShouldRememberCardDetails) {
+                                msg = (msg + "\n To avoid entering card detail on subsequent transactions," +
+                                        " use the token below. \n user token : "
+                                        + mUserCode);
+                            }
+
+                            mAlertMessage.setText(msg);
+                            mAlertMessage.setBackgroundResource(R.drawable.curved_shape_curious_blue);
+
+                            showView(ALERT_MESSAGE);
+                            mPayBtn.setText(R.string.close_form);
+                            mPayBtn.setBackgroundResource(R.drawable.curved_shape);
+                            mPayBtn.setTextColor(Color.BLACK);
+
+                        } else {
+                            mAlertMessage.setText((String) data.get("message"));
+                            mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+                            mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+                            lockorUnlockInputFields(true);
+                            showView(CARD_AND_ALERT_MESSAGE);
+                        }
+                        break;
+                    case RANDOM_DEBIT:
+                        if ((data.get("chargeResponseCode").equals("02")
+                                || data.get("chargeResponseCode").equals("00"))) {
+                            //no auth url returned
+                            mOtpNumber.setEnabled(true);
+                            mValidateTxRef = (String) data.get("flwRef");
+                            mPayBtn.setText(R.string.validate_otp);
+                            mIsAccountValidate = false;
+                            showView(OTP_VIEW);
+                        } else {
+                            mAlertMessage.setText((String) data.get("message"));
+                            mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+                            mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+                            lockorUnlockInputFields(true);
+                            showView(CARD_AND_ALERT_MESSAGE);
+                        }
+                        break;
+                    case PIN:
+                        if ((data.get("chargeResponseCode").equals("02")
+                                || data.get("chargeResponseCode").equals("00"))) {
+                            //no auth url returned
+                            mOtpNumber.setEnabled(true);
+                            mValidateTxRef = (String) data.get("flwRef");
+                            mPayBtn.setText(R.string.validate_otp);
+                            mIsAccountValidate = false;
+                            showView(OTP_VIEW);
+                        } else {
+                            mAlertMessage.setText((String) data.get("message"));
+                            mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+                            mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+                            lockorUnlockInputFields(true);
+                            showView(CARD_AND_ALERT_MESSAGE);
+                        }
+                        break;
+                    default:
+                        // invalid auth model used
+                        System.out.println("Invalid auth model used : " + (String) data.get("authModelUsed"));
+                        break;
+
+                }
+            } else {
+                mAlertMessage.setText((String) data.get("message"));
+                mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+                mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+                lockorUnlockInputFields(true);
+                showView(CARD_AND_ALERT_MESSAGE);
+            }
+
         } else {
             mAlertMessage.setText(R.string.network_error);
             mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
@@ -460,12 +732,12 @@ public class RaveDialog extends Dialog {
                 try {
                     String responseString = response.body().string();
                     Map<String, Object> mapResponse = RaveUtil.getMapFromJsonString(responseString);
-                    List<Map<String, Object>> bankObjects = (List<Map<String,Object>>) mapResponse.get("data");
+                    List<Map<String, Object>> bankObjects = (List<Map<String, Object>>) mapResponse.get("data");
 
                     // can't use java 8 stream cos of api level restriction
-                    for (Map<String,Object> bankObject : bankObjects) {
-                        mBankNames.add((String)bankObject.get("name"));
-                        mBankCodes.add((String)bankObject.get("code"));
+                    for (Map<String, Object> bankObject : bankObjects) {
+                        mBankNames.add((String) bankObject.get("name"));
+                        mBankCodes.add((String) bankObject.get("code"));
                     }
 
                     //set spinners
@@ -505,17 +777,18 @@ public class RaveDialog extends Dialog {
                 String responseString = response.body().string();
                 Map<String, Object> mapResponse = RaveUtil.getMapFromJsonString(responseString);
                 Map<String, Object> data = (Map<String, Object>) mapResponse.get("data");
-                    if (response.isSuccessful() && (data.get("chargeResponseCode").equals("02") || data.get("chargeResponseCode").equals("00"))) {
-                        mOtpNumber.setEnabled(true);
-                        mAccountValidateTxRef = (String) data.get("txRef");
-                        mPayBtn.setText(R.string.validate_otp);
-                        showView(OTP_VIEW);
-                    } else {
-                        // show error alert message  and account view
-                        lockorUnlockInputFields(true);
-                        mAccountNumber.setError((String) data.get("message"));
-                        mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
-                    }
+                if (response.isSuccessful() && (data.get("chargeResponseCode").equals("02") || data.get("chargeResponseCode").equals("00"))) {
+                    mOtpNumber.setEnabled(true);
+                    mValidateTxRef = (String) data.get("txRef");
+                    mPayBtn.setText(R.string.validate_otp);
+                    mIsAccountValidate = true;
+                    showView(OTP_VIEW);
+                } else {
+                    // show error alert message  and account view
+                    lockorUnlockInputFields(true);
+                    mAccountNumber.setError((String) data.get("message"));
+                    mPayBtn.setText(String.format(PAY_FORMAT, mRaveData.getmItemPrice()));
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -626,16 +899,23 @@ public class RaveDialog extends Dialog {
         }
     }
 
+
     private void lockorUnlockInputFields(boolean unLock) {
         mCardButton.setEnabled(unLock);
         mAccountButton.setEnabled(unLock);
         mAccountNumber.setEnabled(unLock);
-        mBankSpinner.setEnabled(unLock);
+        if (mBankSpinner != null) { // might be null if there's no internet connect on client device
+            mBankSpinner.setEnabled(unLock);
+        }
         mOtpSpinner.setEnabled(unLock);
         mCardNumber.setEnabled(unLock);
         mCvv.setEnabled(unLock);
         mExpiryDate.setEnabled(unLock);
         mOtpNumber.setEnabled(unLock);
+        mCardPin.setEnabled(unLock);
+        mUseToken.setEnabled(unLock);
+        mUserToken.setEnabled(unLock);
+        mRememberBox.setEnabled(unLock);
     }
 
     // TODO: move to Rave Rest client and use a handler to get response
@@ -672,6 +952,7 @@ public class RaveDialog extends Dialog {
         @Override
         protected void onPostExecute(Response response) {
             super.onPostExecute(response);
+            //TODO: implement uisng enumerations and switch statement
             //Do anything with response..
             if (!isPostRequest) {
                 handleGetBankResponse(response);
@@ -681,6 +962,8 @@ public class RaveDialog extends Dialog {
                 handleAccountChargeResponse(response);
             } else if (endpoint.equals(VALIDATE_ENDPOINT) && !mIsCardTransaction) {
                 handleAccountValidateResponse(response);
+            } else if (endpoint.equals(VALIDATE_CHARGE_ENDPOINT) && mIsCardTransaction) {
+                handleCardValidateResponse(response);
             } else {
                 Log.e(TAG, "Error handling request response");
             }
@@ -703,10 +986,25 @@ public class RaveDialog extends Dialog {
                 public void run() {
                     Map<String, Object> mapResponse = RaveUtil.getMapFromJsonString(content);
 
-                    mAlertMessage.setText((String) mapResponse.get("vbvrespmessage"));
-                    mAlertMessage.setBackgroundResource(R.drawable.curved_shape_curious_blue);
-
+                    System.out.println("response in web view : " + mapResponse);
+                    mWebView.setVisibility(View.GONE);
+                    String errorCode = (String) mapResponse.get("code");
+                    if (errorCode != null && errorCode.equals("SERV_ERR")) {
+                        mAlertMessage.setText((String) mapResponse.get("message"));
+                        mAlertMessage.setBackgroundResource(R.drawable.curved_shape_dark_pastel_red);
+                    } else {
+                        String msg = (String) mapResponse.get("vbvrespmessage");
+                        Map<Object, Object> chargeToken = (Map<Object, Object>) mapResponse.get("chargeToken");
+                        if (mShouldRememberCardDetails) {
+                            msg = (msg + "\n To avoid entering card detail on subsequent transactions," +
+                                    " use the token below. \n user token : "
+                                    + chargeToken.get("user_token"));
+                        }
+                        mAlertMessage.setText(msg);
+                        mAlertMessage.setBackgroundResource(R.drawable.curved_shape_curious_blue);
+                    }
                     showView(ALERT_MESSAGE);
+                    mPayBtn.setEnabled(true);
                     mPayBtn.setText(R.string.close_form);
                     mPayBtn.setBackgroundResource(R.drawable.curved_shape);
                     mPayBtn.setTextColor(Color.BLACK);

@@ -14,16 +14,18 @@ public class CardChargeRequestData extends BaseRequestData {
     private String cvv;
     private String expiryyear;
     private String expirymonth;
+    private String pin;
 
     public CardChargeRequestData(String PBFPubKey, String amount, String email, String IP,
                                  String txRef, String country, String currency, String firstname,
                                  String lastname, String narration, List<Map<String, Object>> meta,
-                                 String cardno, String cvv, String expiryyear, String expirymonth) {
+                                 String cardno, String cvv, String expiryyear, String expirymonth, String pin) {
         super(PBFPubKey, amount, email, IP, txRef, country, currency, firstname, lastname, narration, meta);
         this.cardno = cardno;
         this.cvv = cvv;
         this.expiryyear = expiryyear;
         this.expirymonth = expirymonth;
+        this.pin = pin;
     }
 
     public String getcardno() {
@@ -42,6 +44,10 @@ public class CardChargeRequestData extends BaseRequestData {
         return expirymonth;
     }
 
+    public String getpasscode() {
+        return pin;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -49,6 +55,7 @@ public class CardChargeRequestData extends BaseRequestData {
                 .add("cvv", cvv)
                 .add("expiryyear", expiryyear)
                 .add("expirymonth", expirymonth)
+                .add("pin", pin)
                 .toString();
     }
 }

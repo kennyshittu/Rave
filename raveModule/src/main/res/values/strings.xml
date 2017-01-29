@@ -7,6 +7,8 @@
     <string name="otp_field_error">Invalid OTP.</string>
     <string name="date_field_error">Enter a valid card expiry date. e.g (MM/YY)</string>
     <string name="cvv_field_error">Enter a valid card cvv.</string>
+    <string name="pin_field_error">Enter a valid card pin.</string>
+    <string name="user_token_field_error">Enter a valid token.</string>
     <string name="please_wait">Please wait...</string>
     <string name="click_here">Click here to complete your \n transaction.</string>
     <string name="close_form">CLOSE FORM</string>
@@ -15,11 +17,14 @@
     <string name="account_number">Account Number</string>
     <string name="otp">OTP</string>
     <string name="card_number">Card Number</string>
+    <string name="card_pin">Card Pin</string>
+    <string name="pin">Card Pin</string>
     <string name="select_bank">SELECT BANK</string>
     <string name="select_otp">SELECT OTP option</string>
     <string name="spinner_error">None selected</string>
     <string name="cvv">CVV</string>
     <string name="date_format">MM/YY</string>
+    <string name="token">Token</string>
 
     <string-array name="bank_array">
         <item>SELECT BANK</item>

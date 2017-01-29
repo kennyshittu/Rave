@@ -26,8 +26,17 @@ Note : You don't have to add these dependencies yourself, they've already been a
 
 ## Installation
 
-Rave can be added to your project manually by adding (dragging) the raveModule folder into your project root directory.
-Then add `compile project(":raveModule")` to your dependencies in build.gradle at app level.
+
+To import Rave into your Android studio project, proceed as follows:
+
+    1. Download project from github
+    2. Unzip the downloaded file (a directory Rave master will be created)
+    3. Click File > New > Import Module.
+    4. In the Source directory box, Navigate to Rave master directory created earlier 
+    5. Select the `raveModule` folder
+    6. Click Finish. Once the module is imported, it appears in the Project window on the left.
+    7. add `compile project(":raveModule")` to your dependencies in build.gradle at app level.
+    8. Finally, clean and rebuild project.
 
 We hope to make rave available on Maven repo and Jcenter soon.
 

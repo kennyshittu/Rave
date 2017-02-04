@@ -629,10 +629,17 @@ public class RaveDialog extends Dialog {
                 mUserCode = (String) chargeToken.get("user_token");
 
                 Number amount = (Number) data.get("amount");
-                Number charged_amount = (Number) data.get("charged_amount");
-                Number appfee = (Number) data.get("appfee");
+                Number chargedAmount = (Number) data.get("charged_amount");
+                Number appFee = (Number) data.get("appfee");
 
-                String amountMsg = String.format("%s + %s = %s", amount, appfee, charged_amount);
+                // this takes care of situation where merchant bears fees charged
+                // by ensuring the app fee displayed to customer is 0
+                // since it has been paid for by merchant
+                if(amount.equals(chargedAmount)){
+                    appFee = 0;
+                }
+
+                String amountMsg = String.format("%s + %s = %s", amount, appFee, chargedAmount);
 
                 mAmountCharge.setText(amountMsg);
 
@@ -793,10 +800,17 @@ public class RaveDialog extends Dialog {
                 if (response.isSuccessful() && (data.get("chargeResponseCode").equals("02") || data.get("chargeResponseCode").equals("00"))) {
 
                     Number amount = (Number) data.get("amount");
-                    Number charged_amount = (Number) data.get("charged_amount");
-                    Number appfee = (Number) data.get("appfee");
+                    Number chargedAmount = (Number) data.get("charged_amount");
+                    Number appFee = (Number) data.get("appfee");
 
-                    String amountMsg = String.format("%s + %s = %s", amount, appfee, charged_amount);
+                    // this takes care of situation where merchant bears fees charged
+                    // by ensuring the app fee displayed to customer is 0
+                    // since it has been paid for by merchant
+                    if(amount.equals(chargedAmount)){
+                        appFee = 0;
+                    }
+
+                    String amountMsg = String.format("%s + %s = %s", amount, appFee, chargedAmount);
 
                     mAmountCharge.setText(amountMsg);
 

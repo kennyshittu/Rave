@@ -943,7 +943,9 @@ public class RaveDialog extends Dialog {
         if (mBankSpinner != null) { // might be null if there's no internet connect on client device
             mBankSpinner.setEnabled(unLock);
         }
-        mOtpSpinner.setEnabled(unLock);
+        if (mOtpSpinner != null) {
+            mOtpSpinner.setEnabled(unLock);
+        }
         mCardNumber.setEnabled(unLock);
         mCvv.setEnabled(unLock);
         mExpiryDate.setEnabled(unLock);

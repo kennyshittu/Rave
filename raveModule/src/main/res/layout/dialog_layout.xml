@@ -228,6 +228,7 @@
                         android:lines="1"
                         android:maxLength="5"
                         android:inputType="number"
+                        android:digits="1234567890,. "
                         android:hint="@string/otp"
                         android:layout_marginTop="8dp" />
 

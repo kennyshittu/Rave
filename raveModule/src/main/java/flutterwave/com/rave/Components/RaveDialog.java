@@ -789,9 +789,9 @@ public class RaveDialog extends Dialog {
                 Map<String, Object> data = (Map<String, Object>) mapResponse.get("data");
                 if (response.isSuccessful() && (data.get("chargeResponseCode").equals("02") || data.get("chargeResponseCode").equals("00"))) {
 
-                    Integer amount = (Integer) data.get("amount");
-                    Double charged_amount = (Double) data.get("charged_amount");
-                    Double appfee = (Double) data.get("appfee");
+                    Number amount = (Number) data.get("amount");
+                    Number charged_amount = (Number) data.get("charged_amount");
+                    Number appfee = (Number) data.get("appfee");
 
                     String amountMsg = String.format("%s + %s = %s", amount, appfee, charged_amount);
 

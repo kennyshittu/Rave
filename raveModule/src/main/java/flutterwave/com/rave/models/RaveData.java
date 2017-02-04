@@ -23,7 +23,6 @@ public class RaveData {
     private String mCustomerEmailAddress;
     private String mIp;
     private String mTxRef;
-    private boolean mIsPinAuthModel;
     private RaveAuthModel mAuthModel;
 
     // optional properties
@@ -43,7 +42,6 @@ public class RaveData {
         this.mSecretKey = builder.secretKey;
         this.mCustomerEmailAddress = builder.customerEmailAddress;
         this.mTxRef = builder.txRef;
-        this.mIsPinAuthModel = builder.isPinAuthModel;
         this.mAuthModel = builder.authModel;
 
         this.mItemImage = builder.itemImage; // will use default rave logo if not set.
@@ -116,10 +114,6 @@ public class RaveData {
         return mMeta;
     }
 
-    public boolean ismIsPinAuthModel() {
-        return mIsPinAuthModel;
-    }
-
     public RaveAuthModel getmAuthModel() {
         return mAuthModel;
     }
@@ -154,10 +148,6 @@ public class RaveData {
 
     public void setmTxRef(String mTxRef) {
         this.mTxRef = mTxRef;
-    }
-
-    public void setmIsPinAuthModel(boolean mIsPinAuthModel) {
-        this.mIsPinAuthModel = mIsPinAuthModel;
     }
 
     public void setmAuthModel(RaveAuthModel mAuthModel) {
@@ -200,7 +190,6 @@ public class RaveData {
         private String secretKey;
         private String customerEmailAddress;
         private String txRef;
-        private boolean isPinAuthModel;
         private RaveAuthModel authModel;
 
         // no compulsory
@@ -214,7 +203,7 @@ public class RaveData {
         private List<Map<String, Object>> meta;
 
         public Builder(String itemName, String itemDescription, Double itemPrice, String pbfPubKey,
-                       String secretKey, String customerEmailAddress, String txRef, boolean isPinAuthModel, RaveAuthModel authModel) {
+                       String secretKey, String customerEmailAddress, String txRef, RaveAuthModel authModel) {
             this.itemName = itemName;
             this.itemDescription = itemDescription;
             this.itemPrice = itemPrice;
@@ -222,7 +211,6 @@ public class RaveData {
             this.secretKey = secretKey;
             this.customerEmailAddress = customerEmailAddress;
             this.txRef = txRef;
-            this.isPinAuthModel = isPinAuthModel;
             this.authModel = authModel;
         }
 

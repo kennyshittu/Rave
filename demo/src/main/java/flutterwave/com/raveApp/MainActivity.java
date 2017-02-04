@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 //                        "FLWSECK-d4c03911a1c2b2db5fbd39d8ca8c2825-X",
 //                        "kehinde.a.shittu@gmail.com",
 //                        "rave-dash-1483447695",
-//                        false,
 //                        RaveAuthModel.VBV_SECURECODE)
 //                        .build();
 //                RaveDialog rave = new RaveDialog(MainActivity.this, raveData);
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 //                        "FLWSECK-a4e9c2480ddf7565a62c1a02c9be3252-X",
 //                        "kehinde.a.shittu@gmail.com",
 //                        "rave-checkout-1485605746",
-//                        false,
 //                        RaveAuthModel.NOAUTH)
 //                        .build();
 //                RaveDialog rave = new RaveDialog(MainActivity.this, raveData);
@@ -81,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 //                        "FLWSECK-fc2285159317c22ffaf3c811a68bc430-X",
 //                        "kehinde.a.shittu@gmail.com",
 //                        "rave-checkout-1485623235",
-//                        false,
 //                        RaveAuthModel.RANDOM_DEBIT)
 //                        .build();
 //                RaveDialog rave = new RaveDialog(MainActivity.this, raveData);
@@ -102,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                         "FLWSECK-9796e060383fecbe90f984dfa9e2e1df-X",
                         "kehinde.a.shittu@gmail.com",
                         "rave-checkout-1485623235",
-                        true,
                         RaveAuthModel.PIN)
                         .build();
                 RaveDialog rave = new RaveDialog(MainActivity.this, raveData);

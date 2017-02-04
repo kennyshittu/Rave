@@ -43,6 +43,7 @@ import flutterwave.com.rave.models.AccountChargeRequestData;
 import flutterwave.com.rave.models.CardChargeRequestData;
 import flutterwave.com.rave.models.BaseRequestData;
 import flutterwave.com.rave.models.RaveData;
+import flutterwave.com.rave.utils.RaveAuthModel;
 import flutterwave.com.rave.utils.RaveUtil;
 import okhttp3.Response;
 
@@ -352,7 +353,7 @@ public class RaveDialog extends Dialog {
         mCardPin = (EditText) findViewById(R.id.card_pin);
         mAmountCharge = (EditText) findViewById(R.id.amount_charged);
 
-        if (mRaveData.isPinAuthModel()) {
+        if (mRaveData.getmAuthModel().equals(RaveAuthModel.PIN)) {
             mCardPin.setVisibility(View.VISIBLE);
         } else {
             mCardPin.setVisibility(View.GONE);
@@ -375,7 +376,7 @@ public class RaveDialog extends Dialog {
                     mCardNumber.setVisibility(View.GONE);
                     mExpiryDate.setVisibility(View.GONE);
                     mRememberBox.setVisibility(View.GONE);
-//                    if (mRaveData.isPinAuthModel()) {
+//                    if (mRaveData.ismIsPinAuthModel()) {
 //                        mCardPin.setVisibility(View.GONE);
 //                    }
                     mUserToken.setVisibility(View.VISIBLE);
@@ -384,7 +385,7 @@ public class RaveDialog extends Dialog {
                     mCardNumber.setVisibility(View.VISIBLE);
                     mExpiryDate.setVisibility(View.VISIBLE);
                     mRememberBox.setVisibility(View.VISIBLE);
-//                    if (mRaveData.isPinAuthModel()) {
+//                    if (mRaveData.ismIsPinAuthModel()) {
 //                        mCardPin.setVisibility(View.VISIBLE);
 //                    }
                 }
@@ -440,7 +441,8 @@ public class RaveDialog extends Dialog {
                             mCvv.getText().toString(),
                             dateData[1], // month
                             dateData[0], // year
-                            mRaveData.isPinAuthModel() ? mCardPin.getText().toString() : ""
+                            mRaveData.getmAuthModel().equals(RaveAuthModel.PIN) ?
+                                    mCardPin.getText().toString() : ""
                     );
 
                 } else {
@@ -458,7 +460,8 @@ public class RaveDialog extends Dialog {
                             mRaveData.getmMeta(),
                             mCvv.getText().toString(),
                             mUserToken.getText().toString(),
-                            mRaveData.isPinAuthModel() ? mCardPin.getText().toString() : ""
+                            mRaveData.getmAuthModel().equals(RaveAuthModel.PIN)  ?
+                                    mCardPin.getText().toString() : ""
                     );
                 }
                 return data;
@@ -514,7 +517,7 @@ public class RaveDialog extends Dialog {
                 isValid = false;
             }
 
-            if (mRaveData.isPinAuthModel()) {
+            if (mRaveData.getmAuthModel().equals(RaveAuthModel.PIN)) {
                 if (mCardPin.getText().length() != 4) {
                     mCardPin.setError(getContext().getString(R.string.pin_field_error));
                     isValid = false;

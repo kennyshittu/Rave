@@ -4,10 +4,11 @@ import android.graphics.Bitmap;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.google.common.primitives.Booleans;
 
 import java.util.List;
 import java.util.Map;
+
+import flutterwave.com.rave.utils.RaveAuthModel;
 
 /**
  * Created by Shittu on 17/12/2016.
@@ -22,7 +23,8 @@ public class RaveData {
     private String mCustomerEmailAddress;
     private String mIp;
     private String mTxRef;
-    private boolean isPinAuthModel;
+    private boolean mIsPinAuthModel;
+    private RaveAuthModel mAuthModel;
 
     // optional properties
     private Bitmap mItemImage;
@@ -41,7 +43,8 @@ public class RaveData {
         this.mSecretKey = builder.secretKey;
         this.mCustomerEmailAddress = builder.customerEmailAddress;
         this.mTxRef = builder.txRef;
-        this.isPinAuthModel = builder.isPinAuthModel;
+        this.mIsPinAuthModel = builder.isPinAuthModel;
+        this.mAuthModel = builder.authModel;
 
         this.mItemImage = builder.itemImage; // will use default rave logo if not set.
         this.mCurrency = Optional.fromNullable(builder.currency).or("NGN");
@@ -113,8 +116,80 @@ public class RaveData {
         return mMeta;
     }
 
-    public boolean isPinAuthModel() {
-        return isPinAuthModel;
+    public boolean ismIsPinAuthModel() {
+        return mIsPinAuthModel;
+    }
+
+    public RaveAuthModel getmAuthModel() {
+        return mAuthModel;
+    }
+
+    public void setmItemName(String mItemName) {
+        this.mItemName = mItemName;
+    }
+
+    public void setmItemDescription(String mItemDescription) {
+        this.mItemDescription = mItemDescription;
+    }
+
+    public void setmItemPrice(Double mItemPrice) {
+        this.mItemPrice = mItemPrice;
+    }
+
+    public void setmPbfPubKey(String mPbfPubKey) {
+        this.mPbfPubKey = mPbfPubKey;
+    }
+
+    public void setmSecretKey(String mSecretKey) {
+        this.mSecretKey = mSecretKey;
+    }
+
+    public void setmCustomerEmailAddress(String mCustomerEmailAddress) {
+        this.mCustomerEmailAddress = mCustomerEmailAddress;
+    }
+
+    public void setmIp(String mIp) {
+        this.mIp = mIp;
+    }
+
+    public void setmTxRef(String mTxRef) {
+        this.mTxRef = mTxRef;
+    }
+
+    public void setmIsPinAuthModel(boolean mIsPinAuthModel) {
+        this.mIsPinAuthModel = mIsPinAuthModel;
+    }
+
+    public void setmAuthModel(RaveAuthModel mAuthModel) {
+        this.mAuthModel = mAuthModel;
+    }
+
+    public void setmItemImage(Bitmap mItemImage) {
+        this.mItemImage = mItemImage;
+    }
+
+    public void setmCurrency(String mCurrency) {
+        this.mCurrency = mCurrency;
+    }
+
+    public void setmCountry(String mCountry) {
+        this.mCountry = mCountry;
+    }
+
+    public void setmFirstName(String mFirstName) {
+        this.mFirstName = mFirstName;
+    }
+
+    public void setmLastName(String mLastName) {
+        this.mLastName = mLastName;
+    }
+
+    public void setmNarration(String mNarration) {
+        this.mNarration = mNarration;
+    }
+
+    public void setmMeta(List<Map<String, Object>> mMeta) {
+        this.mMeta = mMeta;
     }
 
     public static class Builder {
@@ -126,6 +201,7 @@ public class RaveData {
         private String customerEmailAddress;
         private String txRef;
         private boolean isPinAuthModel;
+        private RaveAuthModel authModel;
 
         // no compulsory
         private Bitmap itemImage;
@@ -138,7 +214,7 @@ public class RaveData {
         private List<Map<String, Object>> meta;
 
         public Builder(String itemName, String itemDescription, Double itemPrice, String pbfPubKey,
-                       String secretKey, String customerEmailAddress, String txRef, boolean isPinAuthModel) {
+                       String secretKey, String customerEmailAddress, String txRef, boolean isPinAuthModel, RaveAuthModel authModel) {
             this.itemName = itemName;
             this.itemDescription = itemDescription;
             this.itemPrice = itemPrice;
@@ -147,6 +223,7 @@ public class RaveData {
             this.customerEmailAddress = customerEmailAddress;
             this.txRef = txRef;
             this.isPinAuthModel = isPinAuthModel;
+            this.authModel = authModel;
         }
 
         public Builder withMeta(List<Map<String, Object>> meta) {
